@@ -2,8 +2,9 @@
 *.DS_Store
 
 
-# IntelliJ Idea folder
+# IntelliJ Idea folders
 .idea
+out
 
 
 # Compiled class file
