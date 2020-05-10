@@ -1,10 +1,7 @@
-import org.hl.engine.graphics.Mesh;
-import org.hl.engine.graphics.Renderer;
-import org.hl.engine.graphics.Shader;
-import org.hl.engine.graphics.Vertex;
+import org.hl.engine.graphics.*;
 import org.hl.engine.io.Display;
 import org.hl.engine.io.Input;
-import org.hl.engine.math.Vector3f;
+import org.hl.engine.math.lalg.*;
 import org.lwjgl.glfw.GLFW;
 
 
@@ -18,16 +15,16 @@ public class Test {
     public Shader shader;
 
     public Mesh mesh = new Mesh(new Vertex[] {
-            new Vertex(new Vector3f(-0.5F, 0.5F, 0.0F), new Vector3f(0, 0, 1.0F)),
-            new Vertex(new Vector3f(-0.5F, -0.5F, 0.0F), new Vector3f(0, 0, 1.0F)),
-            new Vertex(new Vector3f(0.5F, -0.5F, 0.0F), new Vector3f(1.0F, 0, 1.0F)),
-            new Vertex(new Vector3f(0.5F, 0.5F, 0.0F), new Vector3f(1.0F, 0, 1.0F) ),
+            new Vertex(new Vector3f(-0.5F, 0.5F, 0.0F), new Vector3f(0, 0, 1.0F), new Vector2f(0, 0)),
+            new Vertex(new Vector3f(-0.5F, -0.5F, 0.0F), new Vector3f(0, 0, 1.0F), new Vector2f(0, 1)),
+            new Vertex(new Vector3f(0.5F, -0.5F, 0.0F), new Vector3f(1.0F, 0, 1.0F), new Vector2f(1, 1)),
+            new Vertex(new Vector3f(0.5F, 0.5F, 0.0F), new Vector3f(1.0F, 0, 1.0F), new Vector2f(1, 0)),
 
     }, new int[] {
             0, 1, 2,
             0, 2, 3
 
-    });
+    }, new Material("/resources/textures/testimg.png"));
 
     public void run() {
         init();
