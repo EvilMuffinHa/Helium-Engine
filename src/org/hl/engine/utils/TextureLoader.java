@@ -1,5 +1,6 @@
 package org.hl.engine.utils;
 
+// Original TextureLoader by Krythic (replaces SlickUtils texture loader)
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
