@@ -12,14 +12,12 @@ import java.nio.IntBuffer;
 public class Mesh {
     private Vertex[] vertices;
     private int[] indices;
-    private Material material;
-    private int vertexArrayObject, positionBufferObject, indicesBufferObject, colorBufferObject, textureBufferObject;
+    private int vertexArrayObject, positionBufferObject, indicesBufferObject, colorBufferObject;
 
     // A group of vertices combined based on the indexes
-    public Mesh(Vertex[] vertices, int[] indices, Material material) {
+    public Mesh(Vertex[] vertices, int[] indices) {
         this.vertices = vertices;
         this.indices = indices;
-        this.material = material;
     }
 
     // Destroy the mesh
@@ -27,8 +25,6 @@ public class Mesh {
         GL15.glDeleteBuffers(positionBufferObject);
         GL15.glDeleteBuffers(indicesBufferObject);
         GL15.glDeleteBuffers(colorBufferObject);
-        GL15.glDeleteBuffers(textureBufferObject);
-        material.destroy();
 
         GL30.glDeleteVertexArrays(vertexArrayObject);
     }
@@ -59,18 +55,7 @@ public class Mesh {
         return colorBufferObject;
     }
 
-    public int getTextureBufferObject() {
-        return textureBufferObject;
-    }
-
-    public Material getMaterial() {
-        return material;
-    }
-
     public void create() {
-
-        // Create the material
-        material.create();
 
         // Creates the mesh by formatting the vertices and indices and inputting them to OpenGL
         vertexArrayObject = GL30.glGenVertexArrays();
@@ -102,19 +87,6 @@ public class Mesh {
         colorBuffer.put(colorData).flip();
 
         colorBufferObject = storeData(colorBuffer, 1, 3);
-
-
-        // Putting texture into the buffer so renderer and shader can read it
-
-        FloatBuffer textureBuffer = MemoryUtil.memAllocFloat(vertices.length * 2);
-        float[] textureData = new float[vertices.length * 3];
-        for (int i = 0; i < vertices.length; i ++ ) {
-            textureData[i * 2] = vertices[i].getTextureCoordinates().getX();
-            textureData[i * 2 + 1] = vertices[i].getTextureCoordinates().getY();
-        }
-        textureBuffer.put(textureData).flip();
-
-        textureBufferObject = storeData(textureBuffer, 2, 2);
 
         IntBuffer indicesBuffer = MemoryUtil.memAllocInt(indices.length);
         indicesBuffer.put(indices).flip();
