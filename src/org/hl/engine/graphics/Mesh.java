@@ -103,16 +103,13 @@ public class Mesh {
 
         colorBufferObject = storeData(colorBuffer, 1, 3);
 
-
-        // Putting texture into the buffer so renderer and shader can read it
-
         FloatBuffer textureBuffer = MemoryUtil.memAllocFloat(vertices.length * 2);
         float[] textureData = new float[vertices.length * 3];
         for (int i = 0; i < vertices.length; i ++ ) {
             textureData[i * 2] = vertices[i].getTextureCoordinates().getX();
             textureData[i * 2 + 1] = vertices[i].getTextureCoordinates().getY();
         }
-        textureBuffer.put(textureData).flip();
+        textureBuffer.put(colorData).flip();
 
         textureBufferObject = storeData(textureBuffer, 2, 2);
 
