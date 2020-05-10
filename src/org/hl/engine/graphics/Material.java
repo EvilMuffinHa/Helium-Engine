@@ -14,16 +14,13 @@ public class Material {
 
     private int width, height;
     private int textureID;
-    private String path;
 
     public Material(String path) {
 
-        this.path = path;
+         this.image = TextureLoader.loadImage(path); //The path is inside the jar file
 
     }
     public void create() {
-        // Loading image on create
-        this.image = TextureLoader.loadImage(path); //The path is inside the jar file
         this.width = this.image.getWidth();
         this.height = this.image.getHeight();
         this.textureID = TextureLoader.loadTexture(image);

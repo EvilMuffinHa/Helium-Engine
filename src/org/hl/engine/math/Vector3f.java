@@ -1,4 +1,4 @@
-package org.hl.engine.math.lalg;
+package org.hl.engine.math;
 
 public class Vector3f {
     private float x;
