@@ -29,6 +29,8 @@ public class Renderer {
 
 		shader.bind();
 
+		shader.setUniform("scale", 2.0F);
+
 		GL11.glDrawElements(GL11.GL_TRIANGLES, mesh.getIndices().length, GL11.GL_UNSIGNED_INT, 0);
 
 		shader.unbind();

@@ -1,8 +1,15 @@
 package org.hl.engine.graphics;
 
+import org.hl.engine.math.lalg.Matrix4f;
+import org.hl.engine.math.lalg.Vector2f;
+import org.hl.engine.math.lalg.Vector3f;
+import org.hl.engine.math.lalg.Vector4f;
 import org.hl.engine.utils.FileUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
+import org.lwjgl.system.MemoryUtil;
+
+import java.nio.FloatBuffer;
 
 public class Shader {
 	private String vertexFile;
@@ -66,9 +73,40 @@ public class Shader {
 			return;
 		}
 
-		GL20.glDeleteShader(vertexID);
-		GL20.glDeleteShader(fragmentID);
+	}
 
+	public int getUniformLocation(String name) {
+		return GL20.glGetUniformLocation(programID, name);
+	}
+
+	public void setUniform(String name, float value) {
+		GL20.glUniform1f(getUniformLocation(name), value);
+	}
+
+	public void setUniform(String name, int value) {
+		GL20.glUniform1i(getUniformLocation(name), value);
+	}
+
+	public void setUniform(String name, boolean value) {
+		GL20.glUniform1i(getUniformLocation(name), value ? 1 : 0);
+	}
+	public void setUniform(String name, Vector2f value) {
+		GL20.glUniform2f(getUniformLocation(name), value.getX(), value.getY());
+
+	}
+
+	public void setUniform(String name, Vector3f value) {
+		GL20.glUniform3f(getUniformLocation(name), value.getX(), value.getY(), value.getZ());
+	}
+
+	public void setUniform(String name, Vector4f value) {
+		GL20.glUniform4f(getUniformLocation(name), value.getX(), value.getY(), value.getZ(), value.getA());
+	}
+
+	public void setUniform(String name, Matrix4f value) {
+		FloatBuffer matrix = MemoryUtil.memAllocFloat(Matrix4f.SIZE * Matrix4f.SIZE);
+		matrix.put(value.convertTo1D()).flip();
+		GL20.glUniformMatrix4fv(getUniformLocation(name), true, matrix);
 	}
 
 	// Bind so we can use the shader
@@ -83,6 +121,12 @@ public class Shader {
 
 	// Destroy the program
 	public void destroy() {
+		GL20.glDetachShader(programID, vertexID);
+		GL20.glDetachShader(programID, fragmentID);
+
+		GL20.glDeleteShader(vertexID);
+		GL20.glDeleteShader(fragmentID);
+
 		GL20.glDeleteProgram(programID);
 	}
 }
