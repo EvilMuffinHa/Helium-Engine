@@ -1,8 +1,11 @@
-#version 330 core
+#version 410 core
 
-in vec3 passColor;
 
-out vec4 outColor;
+
+layout(location = 0) in vec3 passColor;
+layout(location = 1) in vec2 passTextureCoord;
+
+layout(location = 0) out vec4 outColor;
 
 void main() {
     outColor = vec4(passColor, 1.0);
