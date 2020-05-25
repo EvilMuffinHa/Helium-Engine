@@ -1,48 +1,107 @@
 package org.hl.engine.graphics;
 
-import org.hl.engine.utils.TextureLoader;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.openvr.Texture;
-
-import java.awt.image.BufferedImage;
+import org.hl.engine.math.lalg.Vector4f;
 
 public class Material {
+	private static final Vector4f DEFAULT_COLOR = new Vector4f(1.0f, 1.0f, 1.0f, 1.0f);
 
-    private Texture texture;
+	private Vector4f ambientColor;
 
-    private String path;
+	private Vector4f diffuseColor;
 
-    private BufferedImage image;
+	private Vector4f specularColor;
 
-    private int width, height;
-    private int textureID;
+	private float reflectance;
 
-    public Material(String path) {
+	private Texture texture;
 
-        this.path = path;
+	private Texture normalMap;
 
-    }
-    public void create() {
+	public Material() {
+		this.ambientColor = DEFAULT_COLOR;
+		this.diffuseColor = DEFAULT_COLOR;
+		this.specularColor = DEFAULT_COLOR;
+		this.texture = null;
+		this.reflectance = 0;
+	}
 
-        this.image = TextureLoader.loadImage(path); //The path is inside the jar file
-        this.width = this.image.getWidth();
-        this.height = this.image.getHeight();
-        this.textureID = TextureLoader.loadTexture(image);
-    }
+	public Material(Vector4f color, float reflectance) {
+		this(color, color, color, null, reflectance);
+	}
 
-    public int getWidth() {
-        return width;
-    }
+	public Material(Texture texture) {
+		this(DEFAULT_COLOR, DEFAULT_COLOR, DEFAULT_COLOR, texture, 0);
+	}
 
-    public int getHeight() {
-        return height;
-    }
+	public Material(Texture texture, float reflectance) {
+		this(DEFAULT_COLOR, DEFAULT_COLOR, DEFAULT_COLOR, texture, reflectance);
+	}
 
-    public int getTextureID() {
-        return textureID;
-    }
+	public Material(Vector4f ambientColor, Vector4f diffuseColor, Vector4f specularColor, Texture texture, float reflectance) {
+		this.ambientColor = ambientColor;
+		this.diffuseColor = diffuseColor;
+		this.specularColor = specularColor;
+		this.texture = texture;
+		this.reflectance = reflectance;
+	}
 
-    public void destroy() {
-        GL11.glDeleteTextures(textureID);
-    }
+	public Vector4f getAmbientColor() {
+		return ambientColor;
+	}
+
+	public void setAmbientColor(Vector4f ambientColor) {
+		this.ambientColor = ambientColor;
+	}
+
+	public Vector4f getDiffuseColor() {
+		return diffuseColor;
+	}
+
+	public void setDiffuseColor(Vector4f diffuseColor) {
+		this.diffuseColor = diffuseColor;
+	}
+
+	public Vector4f getSpecularColor() {
+		return specularColor;
+	}
+
+	public void setSpecularColor(Vector4f specularColor) {
+		this.specularColor = specularColor;
+	}
+
+	public float getReflectance() {
+		return reflectance;
+	}
+
+	public void setReflectance(float reflectance) {
+		this.reflectance = reflectance;
+	}
+
+	public boolean isTextured() {
+		return this.texture != null;
+	}
+
+	public Texture getTexture() {
+		return texture;
+	}
+
+	public void setTexture(Texture texture) {
+		this.texture = texture;
+	}
+
+	public boolean hasNormalMap() {
+		return this.normalMap != null;
+	}
+
+	public Texture getNormalMap() {
+		return normalMap;
+	}
+
+	public void setNormalMap(Texture normalMap) {
+		this.normalMap = normalMap;
+	}
+
+	public void create() {
+		texture.create();
+	}
 }

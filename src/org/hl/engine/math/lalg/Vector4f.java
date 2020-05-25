@@ -1,21 +1,24 @@
 package org.hl.engine.math.lalg;
 
-public class Vector3f {
+public class Vector4f {
 	private float x;
 	private float y;
 	private float z;
+	private float a;
 
 	// Just a vector if you know what I mean
-	public Vector3f (float x, float y, float z) {
+	public Vector4f (float x, float y, float z, float a) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
+		this.a = a;
 	}
 
-	public void setVector(float x, float y, float z) {
+	public void setVector(float x, float y, float z, float a) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
+		this.a = a;
 	}
 
 	public float getX() {
@@ -40,5 +43,13 @@ public class Vector3f {
 
 	public void setZ(float z) {
 		this.z = z;
+	}
+
+	public float getA() {
+		return a;
+	}
+
+	public void setA(float a) {
+		this.a = a;
 	}
 }
