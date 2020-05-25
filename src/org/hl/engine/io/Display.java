@@ -1,5 +1,6 @@
 package org.hl.engine.io;
 import org.hl.engine.math.lalg.Vector3f;
+import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.glfw.GLFWWindowSizeCallback;
 import org.lwjgl.opengl.GL;
@@ -96,6 +97,8 @@ public class Display {
 	// Creates the window (should go in the init() function of your Main program)
 	public void create() throws Exception {
 
+		GLFWErrorCallback.createPrint(System.err).set();
+
 		// initializing glfw
 		if (!glfwInit()) {
 			//System.err.println("Failed to initialize GLFW! ");
@@ -104,7 +107,7 @@ public class Display {
 		}
 
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL11.GL_TRUE);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
@@ -190,6 +193,7 @@ public class Display {
 	// Completely DESTROYS the window
 	public void destroy() {
 		resizeCallback.free();
+		glfwSetErrorCallback(null).free();
 		glfwDestroyWindow(window);
 		glfwTerminate();
 	}

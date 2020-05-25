@@ -24,7 +24,7 @@ public class Test {
 			0, 1, 2,
 			0, 2, 3
 
-	}, new Material(new Texture("resources/textures/testimg.png")));
+	}, new Material(new Texture("resources/textures/thonk.png")));
 
 	public void run() throws Exception {
 		setup();
@@ -49,7 +49,7 @@ public class Test {
 		display.create();
 		shader = new Shader("/resources/shaders/mainVertex.glsl", "/resources/shaders/mainFragment.glsl");
 		renderer = new Renderer(shader);
-		display.setBackgroundColor(1F, 0, 0);
+		display.setBackgroundColor(1F, 1F, 1F);
 		mesh.create();
 		shader.create();
 
