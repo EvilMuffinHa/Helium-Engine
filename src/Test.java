@@ -8,6 +8,7 @@ import org.lwjgl.glfw.GLFW;
 
 
 public class Test {
+	// Defining original parts of the game
 	public final static int WIDTH = 640, HEIGHT = 480;
 	public final String windowName = "Game!";
 	public Display display;
@@ -27,6 +28,8 @@ public class Test {
 
 	}, new Material(new Texture("resources/textures/thonk.png")));
 
+
+
 	public void run() throws Exception {
 		setup();
 		i = new Input(display);
@@ -45,18 +48,30 @@ public class Test {
 
 
 	public void setup() throws Exception {
-		// System.out.println("Initializing Game ");
+		//First, set up the display
 		display = new Display(WIDTH, HEIGHT, windowName);
 		display.create();
+
+		// Open the shaders (not necessary there are textures)
 		shader = new Shader("/resources/shaders/mainVertex.glsl", "/resources/shaders/mainFragment.glsl");
+
+		// Set up the renderer
 		renderer = new Renderer(shader);
+
+		// Changing the background color
 		display.setBackgroundColor(1F, 1F, 1F);
+
+		// Creating / displaying the mesh
 		mesh.create();
+
+		// Creating the shader
 		shader.create();
 
 	}
+
+	// Updating
 	private void update() {
-		// System.out.println("Updating ");
+		// Just updating lmfao
 		int frames = display.update();
 		display.setWindowName(display.getWindowName().substring(0, 4) + " (Frames : " + frames + ")");
 
@@ -65,19 +80,22 @@ public class Test {
 	}
 
 	private void render() {
-		// System.out.println("Rendering ");
+		// rendering the mesh
 		renderer.renderMesh(mesh);
+		//swap buffers so the new one will appear
 		display.swapBuffers();
 
 	}
 
 	private void close() {
+		// Removing everything
 		display.destroy();
 		mesh.destroy();
 		shader.destroy();
 	}
 
 	public static void main(String[] args) throws Exception {
+		//Running
 		new Test().run();
 	}
 }
