@@ -1,5 +1,6 @@
 package org.hl.engine.io;
 
+import org.hl.engine.math.lalg.Matrix4f;
 import org.hl.engine.math.lalg.Vector3f;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
@@ -29,15 +30,16 @@ public class Display {
 	private int savedPosY;
 	private int savedWidth;
 	private int savedHeight;
-
+	private Matrix4f projection;
 
 
 
 	// Constructor to create the display
-	public Display (int width, int height, String windowName) {
+	public Display (int width, int height, String windowName, float fov, float near, float far) {
 		this.width = width;
 		this.height = height;
 		this.windowName = windowName;
+		projection = Matrix4f.projection(fov, (float)this.width / (float) this.height, near, far);
 	}
 
 	// Change the window name
@@ -65,6 +67,10 @@ public class Display {
 
 	public boolean isFullscreen() {
 		return isFullscreen;
+	}
+
+	public Matrix4f getProjectionMatrix() {
+		return projection;
 	}
 
 	// Makes the screen fullscreen or not based on the argument

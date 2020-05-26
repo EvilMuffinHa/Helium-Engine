@@ -17,6 +17,9 @@ public class Shader {
 
 	private int vertexID, fragmentID, programID;
 
+	public static final String VERTEXSHADER = "/resources/shaders/mainVertex.glsl";
+	public static final String FRAGSHADER = "/resources/shaders/mainFragment.glsl";
+
 	public Shader(String vertexPath, String fragmentPath) {
 		vertexFile = FileUtils.loadAsString(vertexPath);
 		fragmentFile = FileUtils.loadAsString(fragmentPath);

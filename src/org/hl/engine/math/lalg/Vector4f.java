@@ -21,6 +21,13 @@ public class Vector4f {
 		this.a = a;
 	}
 
+	public void add(float x, float y, float z, float a) {
+		this.x += x;
+		this.y += y;
+		this.z += z;
+		this.a += a;
+	}
+
 	public float getX() {
 		return x;
 	}
