@@ -1,8 +1,5 @@
 package org.hl.engine.io;
-
-import org.hl.engine.math.lalg.Matrix4f;
-import org.hl.engine.math.lalg.Vector3f;
-import org.lwjgl.glfw.GLFWErrorCallback;
+import org.hl.engine.math.Vector3f;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.glfw.GLFWWindowSizeCallback;
 import org.lwjgl.opengl.GL;
@@ -11,7 +8,6 @@ import org.lwjgl.opengl.GL11;
 import static org.lwjgl.glfw.GLFW.*;
 
 public class Display {
-
 	private int width, height;
 	private String windowName;
 	private long window;
@@ -30,16 +26,15 @@ public class Display {
 	private int savedPosY;
 	private int savedWidth;
 	private int savedHeight;
-	private Matrix4f projection;
+
 
 
 
 	// Constructor to create the display
-	public Display (int width, int height, String windowName, float fov, float near, float far) {
+	public Display (int width, int height, String windowName) {
 		this.width = width;
 		this.height = height;
 		this.windowName = windowName;
-		projection = Matrix4f.projection(fov, (float)this.width / (float) this.height, near, far);
 	}
 
 	// Change the window name
@@ -67,10 +62,6 @@ public class Display {
 
 	public boolean isFullscreen() {
 		return isFullscreen;
-	}
-
-	public Matrix4f getProjectionMatrix() {
-		return projection;
 	}
 
 	// Makes the screen fullscreen or not based on the argument
@@ -103,19 +94,16 @@ public class Display {
 
 
 	// Creates the window (should go in the init() function of your Main program)
-	public void create() throws Exception {
-
-		GLFWErrorCallback.createPrint(System.err).set();
+	public void create() {
 
 		// initializing glfw
 		if (!glfwInit()) {
-			//System.err.println("Failed to initialize GLFW! ");
-			//System.exit(1);
-			throw new Exception("Failed to initialize GLFW! ");
+			System.err.println("Failed to initialize GLFW! ");
+			System.exit(1);
 		}
 
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL11.GL_TRUE);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
@@ -123,9 +111,8 @@ public class Display {
 		glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
 		window = glfwCreateWindow(this.width, this.height, this.windowName, isFullscreen ? glfwGetPrimaryMonitor():0, 0);
 		if (window == 0) {
-			//System.err.println("Failed to create window! ");
-			//System.exit(1);
-			throw new Exception("Failed to create window! ");
+			System.err.println("Failed to create window! ");
+			System.exit(1);
 		}
 
 		// Setting size of window
@@ -201,7 +188,6 @@ public class Display {
 	// Completely DESTROYS the window
 	public void destroy() {
 		resizeCallback.free();
-		glfwSetErrorCallback(null).free();
 		glfwDestroyWindow(window);
 		glfwTerminate();
 	}
