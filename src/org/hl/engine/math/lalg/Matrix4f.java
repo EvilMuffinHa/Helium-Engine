@@ -26,6 +26,17 @@ public class Matrix4f {
 		return new Matrix4f(identityArray);
 	}
 
+	public static Matrix4f zeroes() {
+		float[][] zeroMatrix = {
+				{0 , 0 , 0 , 0},
+				{0 , 0 , 0 , 0},
+				{0 , 0 , 0 , 0},
+				{0 , 0 , 0 , 0}
+		};
+		return new Matrix4f(zeroMatrix);
+
+	}
+
 	public static Matrix4f translate(Vector3f translate) {
 		Matrix4f result = Matrix4f.identity();
 
@@ -73,8 +84,8 @@ public class Matrix4f {
 		result.set(0, 0, 1.0f / (aspectRatio * tan));
 		result.set(1, 1, 1.0f / tan);
 		result.set(2, 2, -((far + near) / range));
-		result.set(2, 3, -1.0f);
-		result.set(3, 2, -(2.0f*far*near/range));
+		result.set(3, 2, -1.0f);
+		result.set(2, 3, -(2.0f*far*near/range));
 		result.set(3, 3, 0f);
 
 		return result;
@@ -96,15 +107,15 @@ public class Matrix4f {
 
 	public static Matrix4f multiply(Matrix4f first, Matrix4f second) {
 
-		Matrix4f result = Matrix4f.identity();
+		Matrix4f result = Matrix4f.zeroes();
 
 		for (int i = 0; i < SIZE; i ++ ) {
 			for (int j = 0; j < SIZE; j ++) {
 				result.set(i, j,
-									first.get(i, 0) * second.get(0, j) +
-										first.get(i, 1) * second.get(1, j) +
-										first.get(i, 2) * second.get(2, j) +
-										first.get(i, 3) * second.get(3, j)
+									first.get(0, i) * second.get(j, 0) +
+										first.get(1, i) * second.get(j, 1) +
+										first.get(2, i) * second.get(j, 2) +
+										first.get(3, i) * second.get(j, 3)
 				);
 			}
 		}

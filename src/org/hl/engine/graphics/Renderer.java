@@ -34,9 +34,9 @@ public class Renderer {
 
 		shader.bind();
 
-		shader.setUniform("model", Matrix4f.transform(object.getPosition(), object.getRotation(), object.getScale()));
 		shader.setUniform("projection", display.getProjectionMatrix());
 		shader.setUniform("view", Matrix4f.view(camera.getPosition(), camera.getRotation()));
+		shader.setUniform("model", Matrix4f.transform(object.getPosition(), object.getRotation(), object.getScale()));
 
 		GL11.glDrawElements(GL11.GL_TRIANGLES, object.getMesh().getIndices().length, GL11.GL_UNSIGNED_INT, 0);
 

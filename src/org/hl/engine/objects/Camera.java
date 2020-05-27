@@ -1,9 +1,7 @@
 package org.hl.engine.objects;
-
-import org.hl.engine.graphics.Mesh;
 import org.hl.engine.math.lalg.Vector3f;
 
-public class Camera{
+public class Camera {
 	private Vector3f position;
 	private Vector3f rotation;
 
@@ -11,6 +9,8 @@ public class Camera{
 		this.position = position;
 		this.rotation = rotation;
 	}
+
+
 
 	public Vector3f getPosition() {
 		return position;

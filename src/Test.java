@@ -50,8 +50,20 @@ public class Test extends Game {
 
 		//First updating
 		int frames = display.update();
-		//testObject.update();
 		display.setWindowName(display.getWindowName().substring(0, 4) + " (Frames : " + frames + ")");
+
+		float ms = 0.05f;
+		Vector3f cameraPos = camera.getPosition();
+		Vector3f cameraRot = camera.getRotation();
+		if (i.isKeyDown(GLFW.GLFW_KEY_A)) cameraPos = Vector3f.add(cameraPos, new Vector3f(-ms, 0, 0));
+		if (i.isKeyDown(GLFW.GLFW_KEY_D)) cameraPos = Vector3f.add(cameraPos, new Vector3f(ms, 0, 0));
+		if (i.isKeyDown(GLFW.GLFW_KEY_W)) cameraPos = Vector3f.add(cameraPos, new Vector3f(0, 0, -ms));
+		if (i.isKeyDown(GLFW.GLFW_KEY_S)) cameraPos = Vector3f.add(cameraPos, new Vector3f(0, 0, ms));
+		if (i.isKeyDown(GLFW.GLFW_KEY_SPACE)) cameraPos = Vector3f.add(cameraPos, new Vector3f(0, ms, 0));
+		if (i.isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT)) cameraPos = Vector3f.add(cameraPos, new Vector3f(0, -ms, 0));
+		camera.setPosition(cameraPos);
+		camera.setRotation(cameraRot);
+
 
 		i.reset();
 

@@ -14,11 +14,6 @@ public class GameObject {
 		this.mesh = mesh;
 	}
 
-	public void update() {
-		position.add(0, 0, -0.01F);
-		rotation.add(0, 0.001F, 0);
-	}
-
 	public Vector3f getPosition() {
 		return position;
 	}
@@ -33,5 +28,17 @@ public class GameObject {
 
 	public Mesh getMesh() {
 		return mesh;
+	}
+
+	public void setPosition(Vector3f position) {
+		this.position = position;
+	}
+
+	public void setRotation(Vector3f rotation) {
+		this.rotation = rotation;
+	}
+
+	public void setScale(Vector3f scale) {
+		this.scale = scale;
 	}
 }

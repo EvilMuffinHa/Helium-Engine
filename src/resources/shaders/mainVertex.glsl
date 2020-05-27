@@ -14,7 +14,7 @@ layout(location = 1) out vec2 passTextureCoord;
 
 
 void main() {
-	gl_Position = model * view * projection * vec4(position, 1.0);
+	gl_Position =  projection * view  * model *  vec4(position, 1.0);
 	passColor = color;
 
 	passTextureCoord = textureCoord;
