@@ -3,6 +3,7 @@ import org.hl.engine.io.Display;
 import org.hl.engine.io.Input;
 import org.hl.engine.math.lalg.Vector3f;
 import org.hl.engine.math.lalg.Vector2f;
+import org.hl.engine.objects.Camera;
 import org.hl.engine.objects.GameObject;
 import org.lwjgl.glfw.GLFW;
 
@@ -29,9 +30,9 @@ public class Test extends Game {
 
 	}, new Material(new Texture("resources/textures/b.png")));
 
-	public GameObject testObject = new GameObject(mesh, new Vector3f(0, 0, -1), new Vector3f(0, 0, 0), new Vector3f(1, 1, 1));
+	public GameObject testObject = new GameObject(mesh, new Vector3f(0, 0, 0 ), new Vector3f(0, 0, 0), new Vector3f(1, 1, 1));
 
-
+	public Camera camera = new Camera(new Vector3f(0, 0, 1), new Vector3f(0, 0, 0));
 
 	public void run() throws Exception {
 		setup();
@@ -59,7 +60,7 @@ public class Test extends Game {
 
 
 		// rendering the mesh
-		renderer.renderMesh(testObject);
+		renderer.renderMesh(testObject, camera);
 		//swap buffers so the new one will appear
 		display.swapBuffers();
 	}

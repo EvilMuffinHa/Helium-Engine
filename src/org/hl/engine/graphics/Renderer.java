@@ -2,6 +2,7 @@ package org.hl.engine.graphics;
 
 import org.hl.engine.io.Display;
 import org.hl.engine.math.lalg.Matrix4f;
+import org.hl.engine.objects.Camera;
 import org.hl.engine.objects.GameObject;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
@@ -18,7 +19,7 @@ public class Renderer {
 		this.display = display;
 	}
 
-	public void renderMesh(GameObject object) {
+	public void renderMesh(GameObject object, Camera camera) {
 
 		// Renders the mesh by drawing it using triangles (least complicated)
 		GL30.glBindVertexArray(object.getMesh().getVertexArrayObject());
@@ -35,6 +36,7 @@ public class Renderer {
 
 		shader.setUniform("model", Matrix4f.transform(object.getPosition(), object.getRotation(), object.getScale()));
 		shader.setUniform("projection", display.getProjectionMatrix());
+		shader.setUniform("view", Matrix4f.view(camera.getPosition(), camera.getRotation()));
 
 		GL11.glDrawElements(GL11.GL_TRIANGLES, object.getMesh().getIndices().length, GL11.GL_UNSIGNED_INT, 0);
 

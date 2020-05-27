@@ -1,5 +1,7 @@
 package org.hl.engine.math.lalg;
 
+
+
 public class Matrix4f {
 	public static final int SIZE = 4;
 	private float[][] elements = new float[SIZE][SIZE];
@@ -21,8 +23,7 @@ public class Matrix4f {
 				{0 , 0 , 1 , 0},
 				{0 , 0 , 0 , 1}
 		};
-		Matrix4f identity = new Matrix4f(identityArray);
-		return identity;
+		return new Matrix4f(identityArray);
 	}
 
 	public static Matrix4f translate(Vector3f translate) {
@@ -49,8 +50,7 @@ public class Matrix4f {
 				{z*x*C-y*sin , z*y*C + x*sin  ,  cos + z*z*C , 0},
 				{0 , 0 , 0 , 1}
 		};
-		Matrix4f result = new Matrix4f(rotArray);
-		return result;
+		return new Matrix4f(rotArray);
 	}
 
 	public static Matrix4f scale(Vector3f scaleVec) {
@@ -78,6 +78,20 @@ public class Matrix4f {
 		result.set(3, 3, 0f);
 
 		return result;
+	}
+
+	public static Matrix4f view(Vector3f position, Vector3f rotation) {
+
+		Vector3f negative = new Vector3f(-position.getX(), -position.getY(), -position.getZ());
+		Matrix4f translationMatrix = Matrix4f.translate(negative);
+		Matrix4f rotationXMatrix = Matrix4f.rotate(rotation.getX(), new Vector3f(1, 0, 0));
+		Matrix4f rotationYMatrix = Matrix4f.rotate(rotation.getY(), new Vector3f(0, 1, 0));
+		Matrix4f rotationZMatrix = Matrix4f.rotate(rotation.getZ(), new Vector3f(0, 0, 1));
+
+		Matrix4f rotMat = Matrix4f.multiply(rotationZMatrix, Matrix4f.multiply(rotationYMatrix, rotationXMatrix));
+
+		return Matrix4f.multiply(translationMatrix, rotMat);
+
 	}
 
 	public static Matrix4f multiply(Matrix4f first, Matrix4f second) {
@@ -112,7 +126,6 @@ public class Matrix4f {
 	}
 
 	public static Matrix4f transform(Vector3f position, Vector3f rotation, Vector3f scale) {
-		Matrix4f result = identity();
 		Matrix4f translationMatrix = Matrix4f.translate(position);
 		Matrix4f rotationXMatrix = Matrix4f.rotate(rotation.getX(), new Vector3f(1, 0, 0));
 		Matrix4f rotationYMatrix = Matrix4f.rotate(rotation.getY(), new Vector3f(0, 1, 0));
