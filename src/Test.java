@@ -19,10 +19,10 @@ public class Test extends Game {
 	public Shader shader;
 
 	public Mesh plane = new Mesh(new Vertex[] {
-			new Vertex(new Vector3f(-20, 20, 1), new Vector2f(0, 0)),
-			new Vertex(new Vector3f(-20, -20, 1), new Vector2f(0, 1)),
-			new Vertex(new Vector3f(20, -20, 1), new Vector2f(1, 1)),
-			new Vertex(new Vector3f(20, 20, 1), new Vector2f(1, 0)),
+			new Vertex(new Vector3f(-20, -0.5000001f, 20), new Vector2f(0, 0)),
+			new Vertex(new Vector3f(-20, -0.5000001f, -20), new Vector2f(0, 1)),
+			new Vertex(new Vector3f(20, -0.5000001f, -20), new Vector2f(1, 1)),
+			new Vertex(new Vector3f(20, -0.5000001f, 20), new Vector2f(1, 0)),
 	}, new int[] {
 			0, 1, 3,
 			3, 1, 2
@@ -153,7 +153,7 @@ public class Test extends Game {
 		renderer = new Renderer(display, shader);
 
 		// Changing the background color
-		display.setBackgroundColor(0F, 0F, 0F);
+		display.setBackgroundColor(0.53f, .81f, 0.92f);
 
 		// Creating / displaying the mesh
 		mesh.create();

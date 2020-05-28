@@ -48,6 +48,8 @@ public class FirstPersonCamera extends Camera {
 		if (i.isKeyDown(GLFW.GLFW_KEY_S)) movePosition(0, 0, moveSpeed);
 		if (i.isKeyDown(GLFW.GLFW_KEY_SPACE)) movePosition(0, moveSpeed, 0);
 		if (i.isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT)) movePosition(0, -moveSpeed, 0);
+		if (i.keyPress(GLFW.GLFW_KEY_R)) moveSpeed = 4*moveSpeed;
+		if (i.keyReleased(GLFW.GLFW_KEY_R)) moveSpeed = moveSpeed / 4;
 
 		setRotation(cameraRot);
 		setPosition(cameraPos);

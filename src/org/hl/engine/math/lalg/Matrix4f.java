@@ -132,7 +132,7 @@ public class Matrix4f {
 		Matrix4f rotationYMatrix = Matrix4f.rotate(-rotation.getY(), new Vector3f(0, 1, 0));
 		Matrix4f rotationZMatrix = Matrix4f.rotate(-rotation.getZ(), new Vector3f(0, 0, 1));
 
-		Matrix4f rotMat = Matrix4f.multiply(rotationZMatrix, Matrix4f.multiply(rotationYMatrix, rotationXMatrix));
+		Matrix4f rotMat = Matrix4f.multiply(rotationZMatrix, Matrix4f.multiply(rotationXMatrix, rotationYMatrix));
 
 		return Matrix4f.multiply(rotMat, translationMatrix);
 

@@ -37,6 +37,7 @@ public class Camera {
 			position.setX(position.getX() + (float) Math.cos(Math.toRadians(rotation.getY())) * offsetX) ;
 			position.setZ(position.getZ() + (float) Math.sin(Math.toRadians(rotation.getY())) * offsetX);
 		}
+
 		position.setY(position.getY() + offsetY);
 	}
 }
