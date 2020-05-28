@@ -19,15 +19,15 @@ public class Test extends Game {
 	public Shader shader;
 
 	public Mesh plane = new Mesh(new Vertex[] {
-			new Vertex(new Vector3f(-20, 20, 0), new Vector2f(0, 0)),
-			new Vertex(new Vector3f(-20, -20, 0), new Vector2f(0, 1)),
-			new Vertex(new Vector3f(20, -20, 0), new Vector2f(1, 1)),
-			new Vertex(new Vector3f(20, 20, 0), new Vector2f(1, 0)),
+			new Vertex(new Vector3f(-20, 20, 1), new Vector2f(0, 0)),
+			new Vertex(new Vector3f(-20, -20, 1), new Vector2f(0, 1)),
+			new Vertex(new Vector3f(20, -20, 1), new Vector2f(1, 1)),
+			new Vertex(new Vector3f(20, 20, 1), new Vector2f(1, 0)),
 	}, new int[] {
 			0, 1, 3,
 			3, 1, 2
 
-	}, new Material(new Texture("resources/textures/plane.png")));
+	}, new Material(new Texture("resources/textures/thonk.png")));
 
 	public Mesh mesh = new Mesh(new Vertex[] {
 			//Back face
@@ -135,6 +135,7 @@ public class Test extends Game {
 
 		// rendering the mesh
 		renderer.renderMesh(testObject, camera);
+		renderer.renderMesh(testingPlane, camera);
 		//swap buffers so the new one will appear
 		display.swapBuffers();
 	}
@@ -175,6 +176,7 @@ public class Test extends Game {
 		display.destroy();
 		mesh.destroy();
 		shader.destroy();
+		plane.destroy();
 	}
 
 	public static void main(String[] args) throws Exception {
