@@ -27,4 +27,16 @@ public class Camera {
 	public void setRotation(Vector3f rotation) {
 		this.rotation = rotation;
 	}
+
+	public void movePosition(float offsetX, float offsetY, float offsetZ) {
+		if(offsetZ != 0) {
+			position.setZ(position.getZ() + (float) Math.cos(Math.toRadians(rotation.getY())) * offsetZ);
+			position.setX(position.getX() + (float) Math.sin(Math.toRadians(rotation.getY())) * -offsetZ);
+		}
+		if(offsetX != 0) {
+			position.setX(position.getX() + (float) Math.cos(Math.toRadians(rotation.getY())) * offsetX) ;
+			position.setZ(position.getZ() + (float) Math.sin(Math.toRadians(rotation.getY())) * offsetX);
+		}
+		position.setY(position.getY() + offsetY);
+	}
 }

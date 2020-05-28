@@ -31,6 +31,11 @@ public class Display {
 	private int savedWidth;
 	private int savedHeight;
 	private Matrix4f projection;
+	private boolean isLocked;
+	private double[] cursorX = new double[1];
+	private double[] cursorY = new double[1];
+	private double[] enabledCursorX = new double[1];
+	private double[] enabledCursorY = new double[1];
 
 
 
@@ -95,6 +100,26 @@ public class Display {
 		}
 	}
 
+	public void mouseState(boolean lock) {
+		if (lock != isLocked) {
+			if (lock) {
+				glfwGetCursorPos(window, enabledCursorX, enabledCursorY);
+				glfwSetCursorPos(window, cursorX[0], cursorY[0]);
+				isLocked = lock;
+				glfwSetInputMode(window, GLFW_CURSOR, lock ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
+			} else {
+				glfwGetCursorPos(window, cursorX, cursorY);
+				isLocked = lock;
+				glfwSetInputMode(window, GLFW_CURSOR, lock ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
+				glfwSetCursorPos(window, enabledCursorX[0], enabledCursorY[0]);
+			}
+		}
+	}
+
+	public boolean isLocked() {
+		return isLocked;
+	}
+
 	// resized getter
 
 	public boolean isResized() {
@@ -134,6 +159,8 @@ public class Display {
 		windowXPos[0] = (videoMode.width() - this.width) / 2;
 		windowYPos[0] = (videoMode.height() - this.height ) / 2;
 		glfwSetWindowPos(window, windowXPos[0], windowYPos[0]);
+
+		glfwSetCursorPos(window, 0, 0);
 
 
 		// Graphics

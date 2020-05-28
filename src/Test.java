@@ -3,7 +3,7 @@ import org.hl.engine.io.Display;
 import org.hl.engine.io.Input;
 import org.hl.engine.math.lalg.Vector3f;
 import org.hl.engine.math.lalg.Vector2f;
-import org.hl.engine.objects.Camera;
+import org.hl.engine.objects.FirstPersonCamera;
 import org.hl.engine.objects.GameObject;
 import org.lwjgl.glfw.GLFW;
 
@@ -18,26 +18,90 @@ public class Test extends Game {
 	public Renderer renderer;
 	public Shader shader;
 
-	public Mesh mesh = new Mesh(new Vertex[] {
-			new Vertex(new Vector3f(-0.5F, 0.5F, 0.0F), new Vector3f(0, 0, 1.0F), new Vector2f(0, 0)),
-			new Vertex(new Vector3f(-0.5F, -0.5F, 0.0F), new Vector3f(0, 0, 1.0F), new Vector2f(0, 1)),
-			new Vertex(new Vector3f(0.5F, -0.5F, 0.0F), new Vector3f(1.0F, 0, 1.0F), new Vector2f(1, 1)),
-			new Vertex(new Vector3f(0.5F, 0.5F, 0.0F),  new Vector3f(1.0F, 0, 1.0F), new Vector2f(1, 0)),
-
+	public Mesh plane = new Mesh(new Vertex[] {
+			new Vertex(new Vector3f(-20, 20, 0), new Vector2f(0, 0)),
+			new Vertex(new Vector3f(-20, -20, 0), new Vector2f(0, 1)),
+			new Vertex(new Vector3f(20, -20, 0), new Vector2f(1, 1)),
+			new Vertex(new Vector3f(20, 20, 0), new Vector2f(1, 0)),
 	}, new int[] {
-			0, 1, 2,
-			0, 2, 3
+			0, 1, 3,
+			3, 1, 2
 
+	}, new Material(new Texture("resources/textures/plane.png")));
+
+	public Mesh mesh = new Mesh(new Vertex[] {
+			//Back face
+			new Vertex(new Vector3f(-0.5f,  0.5f, -0.5f), new Vector2f(0.0f, 0.0f)),
+			new Vertex(new Vector3f(-0.5f, -0.5f, -0.5f), new Vector2f(0.0f, 1.0f)),
+			new Vertex(new Vector3f( 0.5f, -0.5f, -0.5f), new Vector2f(1.0f, 1.0f)),
+			new Vertex(new Vector3f( 0.5f,  0.5f, -0.5f), new Vector2f(1.0f, 0.0f)),
+
+			//Front face
+			new Vertex(new Vector3f(-0.5f,  0.5f,  0.5f), new Vector2f(0.0f, 0.0f)),
+			new Vertex(new Vector3f(-0.5f, -0.5f,  0.5f), new Vector2f(0.0f, 1.0f)),
+			new Vertex(new Vector3f( 0.5f, -0.5f,  0.5f), new Vector2f(1.0f, 1.0f)),
+			new Vertex(new Vector3f( 0.5f,  0.5f,  0.5f), new Vector2f(1.0f, 0.0f)),
+
+			//Right face
+			new Vertex(new Vector3f( 0.5f,  0.5f, -0.5f), new Vector2f(0.0f, 0.0f)),
+			new Vertex(new Vector3f( 0.5f, -0.5f, -0.5f), new Vector2f(0.0f, 1.0f)),
+			new Vertex(new Vector3f( 0.5f, -0.5f,  0.5f), new Vector2f(1.0f, 1.0f)),
+			new Vertex(new Vector3f( 0.5f,  0.5f,  0.5f), new Vector2f(1.0f, 0.0f)),
+
+			//Left face
+			new Vertex(new Vector3f(-0.5f,  0.5f, -0.5f), new Vector2f(0.0f, 0.0f)),
+			new Vertex(new Vector3f(-0.5f, -0.5f, -0.5f), new Vector2f(0.0f, 1.0f)),
+			new Vertex(new Vector3f(-0.5f, -0.5f,  0.5f), new Vector2f(1.0f, 1.0f)),
+			new Vertex(new Vector3f(-0.5f,  0.5f,  0.5f), new Vector2f(1.0f, 0.0f)),
+
+			//Top face
+			new Vertex(new Vector3f(-0.5f,  0.5f,  0.5f), new Vector2f(0.0f, 0.0f)),
+			new Vertex(new Vector3f(-0.5f,  0.5f, -0.5f), new Vector2f(0.0f, 1.0f)),
+			new Vertex(new Vector3f( 0.5f,  0.5f, -0.5f), new Vector2f(1.0f, 1.0f)),
+			new Vertex(new Vector3f( 0.5f,  0.5f,  0.5f), new Vector2f(1.0f, 0.0f)),
+
+			//Bottom face
+			new Vertex(new Vector3f(-0.5f, -0.5f,  0.5f), new Vector2f(0.0f, 0.0f)),
+			new Vertex(new Vector3f(-0.5f, -0.5f, -0.5f), new Vector2f(0.0f, 1.0f)),
+			new Vertex(new Vector3f( 0.5f, -0.5f, -0.5f), new Vector2f(1.0f, 1.0f)),
+			new Vertex(new Vector3f( 0.5f, -0.5f,  0.5f), new Vector2f(1.0f, 0.0f)),
+	}, new int[] {
+			//Back face
+			0, 1, 3,
+			3, 1, 2,
+
+			//Front face
+			4, 5, 7,
+			7, 5, 6,
+
+			//Right face
+			8, 9, 11,
+			11, 9, 10,
+
+			//Left face
+			12, 13, 15,
+			15, 13, 14,
+
+			//Top face
+			16, 17, 19,
+			19, 17, 18,
+
+			//Bottom face
+			20, 21, 23,
+			23, 21, 22
 	}, new Material(new Texture("resources/textures/b.png")));
+
+	public boolean lockToggle = false;
 
 	public GameObject testObject = new GameObject(mesh, new Vector3f(0, 0, 0 ), new Vector3f(0, 0, 0), new Vector3f(1, 1, 1));
 
-	public Camera camera = new Camera(new Vector3f(0, 0, 1), new Vector3f(0, 0, 0));
+	public GameObject testingPlane = new GameObject(plane, new Vector3f(0, 0, 0 ), new Vector3f(0, 0, 0), new Vector3f(1, 1, 1));
+
+	public FirstPersonCamera camera = new FirstPersonCamera(new Vector3f(0, 0, 1), new Vector3f(0, 0, 0), 0.05f, 0.15f);
 
 	public void run() throws Exception {
 		setup();
-		i = new Input(display);
-		while (!(display.shouldClose()) && !i.isKeyDown(GLFW.GLFW_KEY_ESCAPE)) {
+		while (!(display.shouldClose())) {
 			loop();
 		}
 
@@ -51,18 +115,16 @@ public class Test extends Game {
 		//First updating
 		int frames = display.update();
 		display.setWindowName(display.getWindowName().substring(0, 4) + " (Frames : " + frames + ")");
-
-		float ms = 0.05f;
-		Vector3f cameraPos = camera.getPosition();
-		Vector3f cameraRot = camera.getRotation();
-		if (i.isKeyDown(GLFW.GLFW_KEY_A)) cameraPos = Vector3f.add(cameraPos, new Vector3f(-ms, 0, 0));
-		if (i.isKeyDown(GLFW.GLFW_KEY_D)) cameraPos = Vector3f.add(cameraPos, new Vector3f(ms, 0, 0));
-		if (i.isKeyDown(GLFW.GLFW_KEY_W)) cameraPos = Vector3f.add(cameraPos, new Vector3f(0, 0, -ms));
-		if (i.isKeyDown(GLFW.GLFW_KEY_S)) cameraPos = Vector3f.add(cameraPos, new Vector3f(0, 0, ms));
-		if (i.isKeyDown(GLFW.GLFW_KEY_SPACE)) cameraPos = Vector3f.add(cameraPos, new Vector3f(0, ms, 0));
-		if (i.isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT)) cameraPos = Vector3f.add(cameraPos, new Vector3f(0, -ms, 0));
-		camera.setPosition(cameraPos);
-		camera.setRotation(cameraRot);
+		if (display.isLocked()) {
+			camera.update();
+		}
+		if (i.buttonPress(GLFW.GLFW_MOUSE_BUTTON_LEFT)) {
+			lockToggle = !lockToggle;
+			display.mouseState(lockToggle);
+		} else if (i.isKeyDown(GLFW.GLFW_KEY_ESCAPE)) {
+			lockToggle = false;
+			display.mouseState(lockToggle);
+		}
 
 
 		i.reset();
@@ -94,9 +156,17 @@ public class Test extends Game {
 
 		// Creating / displaying the mesh
 		mesh.create();
+		plane.create();
 
 		// Creating the shader
 		shader.create();
+
+		// Creating the input
+
+		i = new Input(display);
+
+		// Creating the camera
+		camera.create(i);
 
 	}
 

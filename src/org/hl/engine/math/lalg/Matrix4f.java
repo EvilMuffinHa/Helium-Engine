@@ -47,7 +47,20 @@ public class Matrix4f {
 		return result;
 	}
 
-	public static Matrix4f rotate(float angle, Vector3f axis) {
+
+	public static Matrix4f flip(Matrix4f matrix) {
+		Matrix4f flippedMatrix = matrix;
+		for (int i = 0; i < SIZE; i ++) {
+			for (int j = 0; j < SIZE; j ++ ) {
+				flippedMatrix.set(i, j, matrix.get(j, i));
+			}
+		}
+		return flippedMatrix;
+	}
+
+	// This one doesn't work
+
+	/* public static Matrix4f rotate(float angle, Vector3f axis) {
 
 		float cos = (float)Math.cos(Math.toDegrees(angle));
 		float sin = (float)Math.sin(Math.toDegrees(angle));
@@ -61,7 +74,27 @@ public class Matrix4f {
 				{z*x*C-y*sin , z*y*C + x*sin  ,  cos + z*z*C , 0},
 				{0 , 0 , 0 , 1}
 		};
+
 		return new Matrix4f(rotArray);
+	} */
+	public static Matrix4f rotate(float angle, Vector3f axis) {
+		Matrix4f result = Matrix4f.identity();
+
+		float cos = (float) Math.cos(Math.toRadians(angle));
+		float sin = (float) Math.sin(Math.toRadians(angle));
+		float C = 1 - cos;
+
+		result.set(0, 0, cos + axis.getX() * axis.getX() * C);
+		result.set(0, 1, axis.getX() * axis.getY() * C - axis.getZ() * sin);
+		result.set(0, 2, axis.getX() * axis.getZ() * C + axis.getY() * sin);
+		result.set(1, 0, axis.getY() * axis.getX() * C + axis.getZ() * sin);
+		result.set(1, 1, cos + axis.getY() * axis.getY() * C);
+		result.set(1, 2, axis.getY() * axis.getZ() * C - axis.getX() * sin);
+		result.set(2, 0, axis.getZ() * axis.getX() * C - axis.getY() * sin);
+		result.set(2, 1, axis.getZ() * axis.getY() * C + axis.getX() * sin);
+		result.set(2, 2, cos + axis.getZ() * axis.getZ() * C);
+
+		return result;
 	}
 
 	public static Matrix4f scale(Vector3f scaleVec) {
@@ -95,13 +128,13 @@ public class Matrix4f {
 
 		Vector3f negative = new Vector3f(-position.getX(), -position.getY(), -position.getZ());
 		Matrix4f translationMatrix = Matrix4f.translate(negative);
-		Matrix4f rotationXMatrix = Matrix4f.rotate(rotation.getX(), new Vector3f(1, 0, 0));
-		Matrix4f rotationYMatrix = Matrix4f.rotate(rotation.getY(), new Vector3f(0, 1, 0));
-		Matrix4f rotationZMatrix = Matrix4f.rotate(rotation.getZ(), new Vector3f(0, 0, 1));
+		Matrix4f rotationXMatrix = Matrix4f.rotate(-rotation.getX(), new Vector3f(1, 0, 0));
+		Matrix4f rotationYMatrix = Matrix4f.rotate(-rotation.getY(), new Vector3f(0, 1, 0));
+		Matrix4f rotationZMatrix = Matrix4f.rotate(-rotation.getZ(), new Vector3f(0, 0, 1));
 
 		Matrix4f rotMat = Matrix4f.multiply(rotationZMatrix, Matrix4f.multiply(rotationYMatrix, rotationXMatrix));
 
-		return Matrix4f.multiply(translationMatrix, rotMat);
+		return Matrix4f.multiply(rotMat, translationMatrix);
 
 	}
 
