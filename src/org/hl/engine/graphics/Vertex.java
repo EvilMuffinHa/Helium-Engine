@@ -11,17 +11,23 @@ public class Vertex {
 	private Vector3f position;
 	private Vector3f color;
 	private Vector2f textureCoords;
-
-
-	public Vertex (Vector3f position, Vector3f color, Vector2f textureCoords) {
-		this.position = position;
-		this.color = color;
-		this.textureCoords = textureCoords;
-	}
+	private boolean type;
 
 	public Vertex(Vector3f position, Vector2f textureCoords) {
 		this.position = position;
-		this.color = new Vector3f(1.0F, 1.0F, 1.0F);
+		this.textureCoords = textureCoords;
+		this.color = new Vector3f(1, 1, 1);
+	}
+
+	public Vertex(Vector3f position, Vector3f color) {
+		this.position = position;
+		this.color = color;
+		this.textureCoords = new Vector2f(0, 0);
+	}
+
+	public Vertex(Vector3f position, Vector3f color, Vector2f textureCoords) {
+		this.position = position;
+		this.color = color;
 		this.textureCoords = textureCoords;
 	}
 
@@ -38,4 +44,7 @@ public class Vertex {
 		return textureCoords;
 	}
 
+	public boolean isType() {
+		return type;
+	}
 }

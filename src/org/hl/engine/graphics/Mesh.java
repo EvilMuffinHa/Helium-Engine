@@ -15,12 +15,19 @@ public class Mesh {
 	private int[] indices;
 	private int vertexArrayObject, positionBufferObject, indicesBufferObject, colorBufferObject, textureBufferObject;
 	private Material material;
+	private boolean type;
 
 	// A group of vertices combined based on the indexes
-	public Mesh(Vertex[] vertices, int[] indices, Material material) {
+	public Mesh(Vertex[] vertices, int[] indices, Material material, String type) throws Exception {
 		this.vertices = vertices;
 		this.indices = indices;
 		this.material = material;
+		if (!type.equals("texture") && !type.equals("color")) {
+			throw new Exception("Type must be either texture or color. ");
+		}
+		this.type = type.equals("texture");
+
+
 	}
 
 
@@ -139,5 +146,9 @@ public class Mesh {
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
 
 		return bufferID;
+	}
+
+	public boolean isType() {
+		return type;
 	}
 }

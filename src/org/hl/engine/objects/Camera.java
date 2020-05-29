@@ -16,7 +16,7 @@ public class Camera {
 		return position;
 	}
 
-	public void setPosition(Vector3f position) {
+	public void setPosition(Vector3f position) throws Exception {
 		this.position = position;
 	}
 
@@ -24,7 +24,7 @@ public class Camera {
 		return rotation;
 	}
 
-	public void setRotation(Vector3f rotation) {
+	public void setRotation(Vector3f rotation) throws Exception {
 		this.rotation = rotation;
 	}
 

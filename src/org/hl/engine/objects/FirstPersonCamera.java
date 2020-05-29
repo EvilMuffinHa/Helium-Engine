@@ -25,7 +25,7 @@ public class FirstPersonCamera extends Camera {
 		this.i = i;
 	}
 
-	public void update () {
+	public void update () throws Exception {
 
 		newMouseX = i.getMouseX();
 		newMouseY = i.getMouseY();

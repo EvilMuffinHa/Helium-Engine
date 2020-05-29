@@ -3,13 +3,15 @@ import org.hl.engine.io.Display;
 import org.hl.engine.io.Input;
 import org.hl.engine.math.lalg.Vector3f;
 import org.hl.engine.math.lalg.Vector2f;
-import org.hl.engine.objects.FirstPersonCamera;
 import org.hl.engine.objects.GameObject;
+import org.hl.engine.objects.ThirdPersonCamera;
+import org.hl.engine.utils.FileUtils;
 import org.lwjgl.glfw.GLFW;
 
+import java.io.IOException;
 
 
-public class Test extends Game {
+public class Test implements Game {
 	// Defining original parts of the game
 	public final static int WIDTH = 1280, HEIGHT = 760;
 	public final String windowName = "Game!";
@@ -18,18 +20,7 @@ public class Test extends Game {
 	public Renderer renderer;
 	public Shader shader;
 
-	public Mesh plane = new Mesh(new Vertex[] {
-			new Vertex(new Vector3f(-20, -0.5000001f, 20), new Vector2f(0, 0)),
-			new Vertex(new Vector3f(-20, -0.5000001f, -20), new Vector2f(0, 1)),
-			new Vertex(new Vector3f(20, -0.5000001f, -20), new Vector2f(1, 1)),
-			new Vertex(new Vector3f(20, -0.5000001f, 20), new Vector2f(1, 0)),
-	}, new int[] {
-			0, 1, 3,
-			3, 1, 2
-
-	}, new Material(new Texture("resources/textures/thonk.png")));
-
-	public Mesh mesh = new Mesh(new Vertex[] {
+	public Mesh cube = new Mesh(new Vertex[] {
 			//Back face
 			new Vertex(new Vector3f(-0.5f,  0.5f, -0.5f), new Vector2f(0.0f, 0.0f)),
 			new Vertex(new Vector3f(-0.5f, -0.5f, -0.5f), new Vector2f(0.0f, 1.0f)),
@@ -89,15 +80,24 @@ public class Test extends Game {
 			//Bottom face
 			20, 21, 23,
 			23, 21, 22
-	}, new Material(new Texture("resources/textures/b.png")));
+	}, new Material(new Texture("resources/textures/b.png")), "texture");
 
 	public boolean lockToggle = false;
 
-	public GameObject testObject = new GameObject(mesh, new Vector3f(0, 0, 0 ), new Vector3f(0, 0, 0), new Vector3f(1, 1, 1));
+	public GameObject[] gameObjects = new GameObject[500];
 
-	public GameObject testingPlane = new GameObject(plane, new Vector3f(0, 0, 0 ), new Vector3f(0, 0, 0), new Vector3f(1, 1, 1));
+	public GameObject cubeObject = new GameObject(cube, new Vector3f(0, 0, 0 ), new Vector3f(0, 0, 0), new Vector3f(1, 1, 1));
 
-	public FirstPersonCamera camera = new FirstPersonCamera(new Vector3f(0, 0, 1), new Vector3f(0, 0, 0), 0.05f, 0.15f);
+	//public GameObject planeObject = new GameObject(plane, new Vector3f(0, 0, 0 ), new Vector3f(0, 0, 0), new Vector3f(1, 1, 1));
+
+	public GameObject planeObject = new GameObject("resources/objects/plane.mesh", new Vector3f(0, 0, 0 ), new Vector3f(0, 0, 0), new Vector3f(1, 1, 1));
+
+
+	public ThirdPersonCamera camera = new ThirdPersonCamera(new Vector3f(0, 0, 5), new Vector3f(0, 0, 0), cubeObject, 0.5f, 5, 0.1f, 20f, true, true, true);
+
+	public Test() throws Exception {
+	}
+
 
 	public void run() throws Exception {
 		setup();
@@ -109,7 +109,7 @@ public class Test extends Game {
 
 	}
 
-	public void loop(){
+	public void loop() throws Exception {
 
 
 		//First updating
@@ -119,8 +119,10 @@ public class Test extends Game {
 			camera.update();
 		}
 		if (i.buttonPress(GLFW.GLFW_MOUSE_BUTTON_LEFT)) {
-			lockToggle = !lockToggle;
-			display.mouseState(lockToggle);
+			if (!lockToggle) {
+				lockToggle = true;
+				display.mouseState(true);
+			}
 		} else if (i.isKeyDown(GLFW.GLFW_KEY_ESCAPE)) {
 			lockToggle = false;
 			display.mouseState(lockToggle);
@@ -133,18 +135,26 @@ public class Test extends Game {
 		// Now Render!
 
 
-		// rendering the mesh
-		renderer.renderMesh(testObject, camera);
-		renderer.renderMesh(testingPlane, camera);
+		// rendering the cube and plane
+		renderer.renderMesh(cubeObject, camera);
+		renderer.renderMesh(planeObject, camera);
 		//swap buffers so the new one will appear
+
+		for (GameObject gameObject : gameObjects) {
+			renderer.renderMesh(gameObject, camera);
+		}
+
 		display.swapBuffers();
 	}
 
 
 	public void setup() throws Exception {
+
 		//First, set up the display
 		display = new Display(WIDTH, HEIGHT, windowName, 70, 0.1f, 1000f);
 		display.create();
+
+
 
 		// Open the shaders
 		shader = new Shader(Shader.VERTEXSHADER, Shader.FRAGSHADER);
@@ -155,12 +165,20 @@ public class Test extends Game {
 		// Changing the background color
 		display.setBackgroundColor(0.53f, .81f, 0.92f);
 
-		// Creating / displaying the mesh
-		mesh.create();
-		plane.create();
+		// Creating / displaying the cube and plane
+		planeObject.create();
 
 		// Creating the shader
 		shader.create();
+
+
+		for (int i = 0; i < gameObjects.length; i ++) {
+			gameObjects[i] = new GameObject(cube, new Vector3f( (float)Math.random()*50 - 25 , (float)Math.random()*50, (float)Math.random()*50 - 25), new Vector3f(0, 0, 0), new Vector3f(1, 1, 1));
+		}
+
+		for (GameObject gameObject : gameObjects) {
+			gameObject.create();
+		}
 
 		// Creating the input
 
@@ -174,9 +192,12 @@ public class Test extends Game {
 	public void close() {
 		// Removing everything
 		display.destroy();
-		mesh.destroy();
 		shader.destroy();
-		plane.destroy();
+		cubeObject.destroy();
+		planeObject.destroy();
+		for (GameObject gameObject : gameObjects) {
+			gameObject.destroy();
+		}
 	}
 
 	public static void main(String[] args) throws Exception {
