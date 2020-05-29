@@ -254,4 +254,8 @@ public class Display {
 	public void setBackgroundColor(float r, float g, float b) {
 		background.setVector(r, g, b);
 	}
+
+	public void reset() {
+		swapBuffers();
+	}
 }

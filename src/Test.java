@@ -3,6 +3,7 @@ import org.hl.engine.io.Display;
 import org.hl.engine.io.Input;
 import org.hl.engine.math.lalg.Vector3f;
 import org.hl.engine.math.lalg.Vector2f;
+import org.hl.engine.objects.FirstPersonCamera;
 import org.hl.engine.objects.GameObject;
 import org.hl.engine.objects.ThirdPersonCamera;
 import org.hl.engine.utils.FileUtils;
@@ -19,6 +20,8 @@ public class Test implements Game {
 	public Input i;
 	public Renderer renderer;
 	public Shader shader;
+
+	public Mesh dragon = ModelLoader.loadModel("resources/models/dragon.obj", "resources/textures/b.png");
 
 	public Mesh cube = new Mesh(new Vertex[] {
 			//Back face
@@ -84,16 +87,15 @@ public class Test implements Game {
 
 	public boolean lockToggle = false;
 
-	public GameObject[] gameObjects = new GameObject[500];
-
 	public GameObject cubeObject = new GameObject(cube, new Vector3f(0, 0, 0 ), new Vector3f(0, 0, 0), new Vector3f(1, 1, 1));
-
-	//public GameObject planeObject = new GameObject(plane, new Vector3f(0, 0, 0 ), new Vector3f(0, 0, 0), new Vector3f(1, 1, 1));
 
 	public GameObject planeObject = new GameObject("resources/objects/plane.mesh", new Vector3f(0, 0, 0 ), new Vector3f(0, 0, 0), new Vector3f(1, 1, 1));
 
+	public GameObject dragonObject = new GameObject(dragon, new Vector3f(0, 0, 0), new Vector3f(0, 0, 0), new Vector3f(1, 1, 1));
 
-	public ThirdPersonCamera camera = new ThirdPersonCamera(new Vector3f(0, 0, 5), new Vector3f(0, 0, 0), cubeObject, 0.5f, 5, 0.1f, 20f, true, true, true);
+	// public ThirdPersonCamera camera = new ThirdPersonCamera(new Vector3f(0, 0, 5), new Vector3f(0, 0, 0), cubeObject, 0.5f, 5, 0.1f, 20f, false, true, true);
+
+	public FirstPersonCamera camera = new FirstPersonCamera(new Vector3f(0, 0, 5), new Vector3f(0, 0, 0), 0.5f, 0.15f);
 
 	public Test() throws Exception {
 	}
@@ -138,13 +140,10 @@ public class Test implements Game {
 		// rendering the cube and plane
 		renderer.renderMesh(cubeObject, camera);
 		renderer.renderMesh(planeObject, camera);
+		renderer.renderMesh(dragonObject, camera);
 		//swap buffers so the new one will appear
 
-		for (GameObject gameObject : gameObjects) {
-			renderer.renderMesh(gameObject, camera);
-		}
-
-		display.swapBuffers();
+		display.reset();
 	}
 
 
@@ -167,18 +166,11 @@ public class Test implements Game {
 
 		// Creating / displaying the cube and plane
 		planeObject.create();
+		cubeObject.create();
+		dragonObject.create();
 
 		// Creating the shader
 		shader.create();
-
-
-		for (int i = 0; i < gameObjects.length; i ++) {
-			gameObjects[i] = new GameObject(cube, new Vector3f( (float)Math.random()*50 - 25 , (float)Math.random()*50, (float)Math.random()*50 - 25), new Vector3f(0, 0, 0), new Vector3f(1, 1, 1));
-		}
-
-		for (GameObject gameObject : gameObjects) {
-			gameObject.create();
-		}
 
 		// Creating the input
 
@@ -195,9 +187,7 @@ public class Test implements Game {
 		shader.destroy();
 		cubeObject.destroy();
 		planeObject.destroy();
-		for (GameObject gameObject : gameObjects) {
-			gameObject.destroy();
-		}
+		dragonObject.destroy();
 	}
 
 	public static void main(String[] args) throws Exception {

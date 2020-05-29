@@ -28,9 +28,7 @@ public class GameObject {
 	}
 
 	public GameObject(String meshFileName, Vector3f position, Vector3f rotation, Vector3f scale) throws Exception {
-		if (!meshFileName.endsWith(".mesh")) {
-			throw new Exception("Wrong file type! ");
-		}
+		if (!meshFileName.endsWith(".mesh")) { throw new Exception("Wrong file type! "); }
 		Yaml yaml = new Yaml();
 		FileInputStream inputStream = new FileInputStream(meshFileName);
 		YMesh yMesh = yaml.loadAs(inputStream, YMesh.class);
@@ -54,22 +52,17 @@ public class GameObject {
 		if (!type.equals("texture") && !type.equals("color")) {
 			throw new Exception("Incorrect type. Type can only be texture or color. ");
 		}
-
 		for (int i = 0; i < vertices.length; i ++) {
 			Vertex value = new Vertex(
 					new Vector3f(vertices[i].getVertex().get(0), vertices[i].getVertex().get(1), vertices[i].getVertex().get(2)),
 					new Vector3f(vertices[i].getColor().get(0), vertices[i].getColor().get(1), vertices[i].getColor().get(2)),
-					new Vector2f(vertices[i].getTexture().get(0), vertices[i].getTexture().get(1))
-
-			);
+					new Vector2f(vertices[i].getTexture().get(0), vertices[i].getTexture().get(1)));
 			meshFormat[i] = value;
-
 		}
 		int[] indices = new int[cull.length];
 		for (int j = 0; j < cull.length; j ++) {
 			indices[j] = cull[j];
 		}
-
 		this.mesh = new Mesh(meshFormat, indices, new Material(new Texture(texture)), type);
 		this.position = position;
 		this.scale = scale;

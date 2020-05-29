@@ -8,7 +8,7 @@ public class Vertex {
 
 	// Just a vertex
 
-	private Vector3f position;
+	private Vector3f position, normal;
 	private Vector3f color;
 	private Vector2f textureCoords;
 	private boolean type;
@@ -16,6 +16,13 @@ public class Vertex {
 	public Vertex(Vector3f position, Vector2f textureCoords) {
 		this.position = position;
 		this.textureCoords = textureCoords;
+		this.color = new Vector3f(1, 1, 1);
+	}
+
+	public Vertex(Vector3f position, Vector2f textureCoords, Vector3f normal) {
+		this.position = position;
+		this.textureCoords = textureCoords;
+		this.normal = normal;
 		this.color = new Vector3f(1, 1, 1);
 	}
 
@@ -46,5 +53,9 @@ public class Vertex {
 
 	public boolean isType() {
 		return type;
+	}
+
+	public Vector3f getNormal() {
+		return normal;
 	}
 }
