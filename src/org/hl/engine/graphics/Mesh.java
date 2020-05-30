@@ -12,12 +12,21 @@ import java.nio.IntBuffer;
 public class Mesh {
 	private Vertex[] vertices;
 	private int[] indices;
-	private int vertexArrayObject, positionBufferObject, indicesBufferObject, colorBufferObject;
+	private int vertexArrayObject, positionBufferObject, indicesBufferObject, colorBufferObject, textureBufferObject;
+	private Material material;
+	private boolean type;
 
 	// A group of vertices combined based on the indexes
-	public Mesh(Vertex[] vertices, int[] indices) {
+	public Mesh(Vertex[] vertices, int[] indices, Material material, String type) throws Exception {
 		this.vertices = vertices;
 		this.indices = indices;
+		this.material = material;
+		if (!type.equals("texture") && !type.equals("color")) {
+			throw new Exception("Type must be either texture or color. ");
+		}
+		this.type = type.equals("texture");
+
+
 	}
 
 	// Destroy the mesh
@@ -107,5 +116,13 @@ public class Mesh {
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
 
 		return bufferID;
+	}
+
+	public boolean isType() {
+		return type;
+	}
+
+	public void setMaterial(Material material) {
+		this.material = material;
 	}
 }

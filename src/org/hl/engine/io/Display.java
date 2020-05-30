@@ -26,7 +26,12 @@ public class Display {
 	private int savedPosY;
 	private int savedWidth;
 	private int savedHeight;
-
+	private Matrix4f projection;
+	private boolean isLocked;
+	private double[] cursorX = new double[1];
+	private double[] cursorY = new double[1];
+	private double[] enabledCursorX = new double[1];
+	private double[] enabledCursorY = new double[1];
 
 
 
@@ -86,6 +91,26 @@ public class Display {
 		}
 	}
 
+	public void mouseState(boolean lock) {
+		if (lock != isLocked) {
+			if (lock) {
+				glfwGetCursorPos(window, enabledCursorX, enabledCursorY);
+				glfwSetCursorPos(window, cursorX[0], cursorY[0]);
+				isLocked = lock;
+				glfwSetInputMode(window, GLFW_CURSOR, lock ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
+			} else {
+				glfwGetCursorPos(window, cursorX, cursorY);
+				isLocked = lock;
+				glfwSetInputMode(window, GLFW_CURSOR, lock ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
+				glfwSetCursorPos(window, enabledCursorX[0], enabledCursorY[0]);
+			}
+		}
+	}
+
+	public boolean isLocked() {
+		return isLocked;
+	}
+
 	// resized getter
 
 	public boolean isResized() {
@@ -101,9 +126,13 @@ public class Display {
 			System.err.println("Failed to initialize GLFW! ");
 			System.exit(1);
 		}
-
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+		if(System.getProperty("os.name").contains("Mac")) {
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+		} else {
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+		}
 		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL11.GL_TRUE);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
@@ -121,6 +150,8 @@ public class Display {
 		windowXPos[0] = (videoMode.width() - this.width) / 2;
 		windowYPos[0] = (videoMode.height() - this.height ) / 2;
 		glfwSetWindowPos(window, windowXPos[0], windowYPos[0]);
+
+		glfwSetCursorPos(window, 0, 0);
 
 
 		// Graphics
@@ -208,5 +239,9 @@ public class Display {
 
 	public void setBackgroundColor(float r, float g, float b) {
 		background.setVector(r, g, b);
+	}
+
+	public void reset() {
+		swapBuffers();
 	}
 }

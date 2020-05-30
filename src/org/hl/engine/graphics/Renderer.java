@@ -1,5 +1,9 @@
 package org.hl.engine.graphics;
 
+import org.hl.engine.io.Display;
+import org.hl.engine.math.lalg.Matrix4f;
+import org.hl.engine.objects.Camera;
+import org.hl.engine.objects.GameObject;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL30;
@@ -12,8 +16,7 @@ public class Renderer {
 		this.shader = shader;
 	}
 
-
-	public void renderMesh(Mesh mesh) {
+	public void renderMesh(GameObject object, Camera camera) {
 
 		// Renders the mesh by drawing it using triangles (least complicated)
 		GL30.glBindVertexArray(mesh.getVertexArrayObject());
@@ -23,7 +26,12 @@ public class Renderer {
 
 		shader.bind();
 
-		GL11.glDrawElements(GL11.GL_TRIANGLES, mesh.getIndices().length, GL11.GL_UNSIGNED_INT, 0);
+		shader.setUniform("type", object.getMesh().isType());
+		shader.setUniform("projection", display.getProjectionMatrix());
+		shader.setUniform("view", Matrix4f.view(camera.getPosition(), camera.getRotation()));
+		shader.setUniform("model", Matrix4f.transform(object.getPosition(), object.getRotation(), object.getScale()));
+
+		GL11.glDrawElements(GL11.GL_TRIANGLES, object.getMesh().getIndices().length, GL11.GL_UNSIGNED_INT, 0);
 
 		shader.unbind();
 		GL30.glDisableVertexAttribArray(0);
