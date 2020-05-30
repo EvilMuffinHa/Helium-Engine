@@ -1,4 +1,4 @@
-package org.hl.engine.math;
+package org.hl.engine.math.lalg;
 
 import java.util.Objects;
 

@@ -1,5 +1,6 @@
 package org.hl.engine.io;
-import org.hl.engine.math.Vector3f;
+import org.hl.engine.math.lalg.Vector3f;
+import org.hl.engine.math.lalg.Matrix4f;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.glfw.GLFWWindowSizeCallback;
 import org.lwjgl.opengl.GL;

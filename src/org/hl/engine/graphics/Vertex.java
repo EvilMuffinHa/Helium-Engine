@@ -1,6 +1,7 @@
 package org.hl.engine.graphics;
 
-import org.hl.engine.math.Vector3f;
+import org.hl.engine.math.lalg.Vector2f;
+import org.hl.engine.math.lalg.Vector3f;
 
 public class Vertex {
 
