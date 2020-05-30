@@ -21,9 +21,9 @@ public class Test implements Game {
 	public Renderer renderer;
 	public Shader shader;
 
-	public Mesh dragon = ModelLoader.loadModel("resources/models/dragon.obj", "resources/textures/b.png");
+	public boolean lockToggle = false;
 
-	public Mesh cube = new Mesh(new Vertex[] {
+	public GameObject cubeObject = new GameObject(new Mesh(new Vertex[] {
 			//Back face
 			new Vertex(new Vector3f(-0.5f,  0.5f, -0.5f), new Vector2f(0.0f, 0.0f)),
 			new Vertex(new Vector3f(-0.5f, -0.5f, -0.5f), new Vector2f(0.0f, 1.0f)),
@@ -83,19 +83,15 @@ public class Test implements Game {
 			//Bottom face
 			20, 21, 23,
 			23, 21, 22
-	}, new Material(new Texture("resources/textures/b.png")), "texture");
-
-	public boolean lockToggle = false;
-
-	public GameObject cubeObject = new GameObject(cube, new Vector3f(0, 0, 0 ), new Vector3f(0, 0, 0), new Vector3f(1, 1, 1));
+	}, new Material(new Texture("resources/textures/b.png")), "texture"), new Vector3f(0, 0, 0 ), new Vector3f(0, 0, 0), new Vector3f(1, 1, 1));
 
 	public GameObject planeObject = new GameObject("resources/objects/plane.mesh", new Vector3f(0, 0, 0 ), new Vector3f(0, 0, 0), new Vector3f(1, 1, 1));
 
-	public GameObject dragonObject = new GameObject(dragon, new Vector3f(0, 0, 0), new Vector3f(0, 0, 0), new Vector3f(1, 1, 1));
+	public GameObject dragonObject = new GameObject("resources/models/dragon.obj", "resources/textures/b.png", new Vector3f(0, 0, 0), new Vector3f(0, 0, 0), new Vector3f(1, 1, 1));
 
-	// public ThirdPersonCamera camera = new ThirdPersonCamera(new Vector3f(0, 0, 5), new Vector3f(0, 0, 0), cubeObject, 0.5f, 5, 0.1f, 20f, false, true, true);
+	public ThirdPersonCamera camera = new ThirdPersonCamera(new Vector3f(0, 0, 5), new Vector3f(0, 0, 0), cubeObject, 0.5f, 5, 0.1f, 12f, true, true, true);
 
-	public FirstPersonCamera camera = new FirstPersonCamera(new Vector3f(0, 0, 5), new Vector3f(0, 0, 0), 0.5f, 0.15f);
+	// public FirstPersonCamera camera = new FirstPersonCamera(new Vector3f(0, 0, 5), new Vector3f(0, 0, 0), 0.1f, 0.15f);
 
 	public Test() throws Exception {
 	}
@@ -118,7 +114,7 @@ public class Test implements Game {
 		int frames = display.update();
 		display.setWindowName(display.getWindowName().substring(0, 4) + " (Frames : " + frames + ")");
 		if (display.isLocked()) {
-			camera.update();
+			camera.standardKeybindUpdate();
 		}
 		if (i.buttonPress(GLFW.GLFW_MOUSE_BUTTON_LEFT)) {
 			if (!lockToggle) {

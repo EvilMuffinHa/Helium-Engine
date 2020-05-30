@@ -25,7 +25,7 @@ public class FirstPersonCamera extends Camera {
 		this.i = i;
 	}
 
-	public void update () throws Exception {
+	public void standardKeybindUpdate () throws Exception {
 
 		newMouseX = i.getMouseX();
 		newMouseY = i.getMouseY();
@@ -48,13 +48,49 @@ public class FirstPersonCamera extends Camera {
 		if (i.isKeyDown(GLFW.GLFW_KEY_S)) movePosition(0, 0, moveSpeed);
 		if (i.isKeyDown(GLFW.GLFW_KEY_SPACE)) movePosition(0, moveSpeed, 0);
 		if (i.isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT)) movePosition(0, -moveSpeed, 0);
-		if (i.keyPress(GLFW.GLFW_KEY_R)) moveSpeed = 4*moveSpeed;
-		if (i.keyReleased(GLFW.GLFW_KEY_R)) moveSpeed = moveSpeed / 4;
+		if (i.keyPress(GLFW.GLFW_KEY_R)) moveSpeed = 3*moveSpeed;
+		if (i.keyReleased(GLFW.GLFW_KEY_R)) moveSpeed = moveSpeed / 3;
 
 		setRotation(cameraRot);
 		setPosition(cameraPos);
 
 		i.reset();
+	}
+
+	public void moveForward() {
+		movePosition(0, 0, -moveSpeed);
+	}
+	public void moveBackward() {
+		movePosition(0, 0, moveSpeed);
+	}
+	public void moveLeft() {
+		movePosition(-moveSpeed, 0, 0);
+	}
+	public void moveRight() {
+		movePosition(moveSpeed, 0, 0);
+	}
+	public void moveUp() {
+		movePosition(0, moveSpeed, 0);
+	}
+	public void moveDown() {
+		movePosition(0, -moveSpeed, 0);
+	}
+
+	public float getMoveSpeed() {
+		return moveSpeed;
+	}
+
+	public void setMoveSpeed(float moveSpeed) {
+		this.moveSpeed = moveSpeed;
+	}
+
+	public void rotateCamera(float dx, float dy) throws Exception {
+
+		Vector3f cameraRot = getRotation();
+		cameraRot = Vector3f.add(cameraRot, new Vector3f(dy*sensitivity, dx*sensitivity, 0));
+
+
+		setRotation(cameraRot);
 
 	}
 }

@@ -1,9 +1,6 @@
 package org.hl.engine.objects;
 
-import org.hl.engine.graphics.Material;
-import org.hl.engine.graphics.Mesh;
-import org.hl.engine.graphics.Texture;
-import org.hl.engine.graphics.Vertex;
+import org.hl.engine.graphics.*;
 import org.hl.engine.math.lalg.Vector2f;
 import org.hl.engine.math.lalg.Vector3f;
 import org.hl.engine.objects.yloaders.YMesh;
@@ -32,10 +29,10 @@ public class GameObject {
 		Yaml yaml = new Yaml();
 		FileInputStream inputStream = new FileInputStream(meshFileName);
 		YMesh yMesh = yaml.loadAs(inputStream, YMesh.class);
-		Integer[] cull = yMesh.getCull().toArray(new Integer[yMesh.getCull().size()]);
+		Integer[] cull = yMesh.getCull().toArray(new Integer[0]);
 		String type = yMesh.getType();
 		String texture = yMesh.getTexture();
-		YPoint[] vertices = yMesh.getVertices().toArray(new YPoint[yMesh.getVertices().size()]);
+		YPoint[] vertices = yMesh.getVertices().toArray(new YPoint[0]);
 		Vertex[] meshFormat = new Vertex[vertices.length];
 
 		for (YPoint vertex : vertices) {
@@ -68,6 +65,12 @@ public class GameObject {
 		this.scale = scale;
 		this.rotation = rotation;
 
+	}
+	public GameObject(String meshFileName, String texturePath, Vector3f position, Vector3f rotation, Vector3f scale) throws Exception {
+		this.mesh = ModelLoader.loadModel(meshFileName, texturePath);
+		this.position = position;
+		this.scale = scale;
+		this.rotation = rotation;
 	}
 
 

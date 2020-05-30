@@ -43,9 +43,7 @@ public class ThirdPersonCamera extends Camera {
 	}
 
 
-	public void update() throws Exception {
-
-		near = 0.1f;
+	public void standardKeybindUpdate() throws Exception {
 
 		newMouseX = i.getMouseX();
 		newMouseY = i.getMouseY();
@@ -63,8 +61,12 @@ public class ThirdPersonCamera extends Camera {
 			if (i.isButtonDown(GLFW.GLFW_MOUSE_BUTTON_RIGHT) && zoomEnabled) {
 				if (distance > 0) {
 					distance += dy * sensitivity;
-				} else {
+				}
+				else {
 					distance = near;
+				}
+				if (distance > far) {
+					distance = far;
 				}
 			}
 		} else if (clickToMove) {
@@ -79,6 +81,9 @@ public class ThirdPersonCamera extends Camera {
 				} else {
 					distance = near;
 				}
+				if (distance > far) {
+					distance = far;
+				}
 			}
 
 		} else if (clickToZoom) {
@@ -92,6 +97,9 @@ public class ThirdPersonCamera extends Camera {
 				} else {
 					distance = near;
 				}
+				if (distance > far) {
+					distance = far;
+				}
 			}
 
 		} else {
@@ -103,6 +111,9 @@ public class ThirdPersonCamera extends Camera {
 					distance += dy * sensitivity;
 				} else {
 					distance = near;
+				}
+				if (distance > far) {
+					distance = far;
 				}
 			}
 
@@ -123,6 +134,40 @@ public class ThirdPersonCamera extends Camera {
 
 		i.reset();
 
+	}
+	public void movePosition (float dy, float dx) throws Exception {
+		vertAngle -= dy * sensitivity;
+		horizAngle += dx * sensitivity;
+
+		float horizDistance = (float) (distance * Math.cos(Math.toRadians(vertAngle)));
+		float vertDistance = (float) (distance * Math.sin(Math.toRadians(vertAngle)));
+
+		float xOffset = (float) (horizDistance * Math.sin(Math.toRadians(-horizAngle)));
+		float zOffset = (float) (horizDistance * Math.cos(Math.toRadians(-horizAngle)));
+
+		setPosition(new Vector3f(object.getPosition().getX() + xOffset, object.getPosition().getY() - vertDistance, object.getPosition().getZ() + zOffset));
+		setRotation(new Vector3f(-vertAngle, horizAngle,0));
+	}
+	public void zoom (float dy) throws Exception {
+		if (zoomEnabled) {
+			if (distance > 0) {
+				distance += dy * sensitivity;
+			} else {
+				distance = near;
+			}
+			if (distance > far) {
+				distance = far;
+			}
+		}
+
+		float horizDistance = (float) (distance * Math.cos(Math.toRadians(vertAngle)));
+		float vertDistance = (float) (distance * Math.sin(Math.toRadians(vertAngle)));
+
+		float xOffset = (float) (horizDistance * Math.sin(Math.toRadians(-horizAngle)));
+		float zOffset = (float) (horizDistance * Math.cos(Math.toRadians(-horizAngle)));
+
+		setPosition(new Vector3f(object.getPosition().getX() + xOffset, object.getPosition().getY() - vertDistance, object.getPosition().getZ() + zOffset));
+		setRotation(new Vector3f(-vertAngle, horizAngle,0));
 
 	}
 }
