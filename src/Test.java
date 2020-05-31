@@ -126,6 +126,8 @@ public class Test implements Game {
 			display.mouseState(lockToggle);
 		}
 
+		cubeObject.setRotation(Vector3f.add(cubeObject.getRotation(), new Vector3f(1, 1, 1)));
+
 
 		i.reset();
 
