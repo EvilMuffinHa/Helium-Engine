@@ -136,9 +136,9 @@ public class Test implements Game {
 
 
 		// rendering the cube and plane
-		renderer.renderMesh(cubeObject, camera);
-		renderer.renderMesh(planeObject, camera);
-		renderer.renderMesh(dragonObject, camera);
+		renderer.renderObject3D(cubeObject, camera);
+		renderer.renderObject3D(planeObject, camera);
+		renderer.renderObject3D(dragonObject, camera);
 		//swap buffers so the new one will appear
 
 		display.reset();
@@ -148,13 +148,13 @@ public class Test implements Game {
 	public void setup() throws Exception {
 
 		//First, set up the display
-		display = new Display(WIDTH, HEIGHT, windowName, 70, 0.1f, 1000f);
+		display = new Display(WIDTH, HEIGHT, windowName);
 		display.create();
 
 
 
 		// Open the shaders
-		shader = new Shader(Shader.VERTEXSHADER, Shader.FRAGSHADER);
+		shader = new Shader(0);
 
 		// Set up the renderer
 		renderer = new Renderer(display, shader);

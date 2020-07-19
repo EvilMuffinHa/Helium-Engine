@@ -30,7 +30,6 @@ public class Display {
 	private int savedPosY;
 	private int savedWidth;
 	private int savedHeight;
-	private Matrix4f projection;
 	private boolean isLocked;
 	private double[] cursorX = new double[1];
 	private double[] cursorY = new double[1];
@@ -40,11 +39,14 @@ public class Display {
 
 
 	// Constructor to create the display
-	public Display (int width, int height, String windowName, float fov, float near, float far) {
+	public Display (int width, int height, String windowName) {
 		this.width = width;
 		this.height = height;
 		this.windowName = windowName;
-		projection = Matrix4f.projection(fov, (float)this.width / (float) this.height, near, far);
+	}
+
+	public float getAspectRatio() {
+		return (float)this.width / (float)this.height;
 	}
 
 	// Change the window name
@@ -72,10 +74,6 @@ public class Display {
 
 	public boolean isFullscreen() {
 		return isFullscreen;
-	}
-
-	public Matrix4f getProjectionMatrix() {
-		return projection;
 	}
 
 	// Makes the screen fullscreen or not based on the argument
@@ -124,6 +122,7 @@ public class Display {
 
 	public boolean isResized() {
 		return isResized;
+
 	}
 
 

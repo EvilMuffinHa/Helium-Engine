@@ -108,7 +108,7 @@ public class Matrix4f {
 		return result;
 	}
 
-	public static Matrix4f projection( float fov, float aspectRatio, float near, float far) {
+	public static Matrix4f perspective( float fov, float aspectRatio, float near, float far) {
 		Matrix4f result = Matrix4f.identity();
 
 		float tan = (float)Math.tan(Math.toRadians(fov / 2));
@@ -121,6 +121,17 @@ public class Matrix4f {
 		result.set(2, 3, -(2.0f*far*near/range));
 		result.set(3, 3, 0f);
 
+		return result;
+	}
+
+	public static Matrix4f orthoProjection(float right, float left, float bottom, float top, float near, float far) {
+		Matrix4f result = Matrix4f.identity();
+		result.set(0, 0, 2/(right - left));
+		result.set(1, 1, 2/(top - bottom));
+		result.set(2, 2, -2/(far - near));
+		result.set(0, 3, -(right + left) / (right - left));
+		result.set(1, 3, -(top + bottom) / (top - bottom));
+		result.set(2, 3, -(far + near) / (far - near));
 		return result;
 	}
 
